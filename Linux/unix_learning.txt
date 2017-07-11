@@ -1,0 +1,17 @@
+-login to server with login and password,
+-browse file system and know its structure (effectively), (symlink)
+-know user and group function, unix access rights (what is execute), (cat /etc/passwd)
+-watch server status - cpu server load, running processes, disc usages..., (top, ps (wc), htop)
+-find something on file system by some criteria (file age, name...), (find pøíkaz)
+-full text file browsing, (grep)
+•work with archives (tar.gz...),
+•compress by gzip,
+•load files up and down,
+-edit files on terminal, (awk, sed)
+•use git in terminal,
+-create script (start with #!, be executable...),
+-use programming contructs in shell (for cycle, variables, ...).
+
+
+tee - vypíše do konzole i do souboru
+touch - dotknout se (zmìna data modifikace bez otevøení)

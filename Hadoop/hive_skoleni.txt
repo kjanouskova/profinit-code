@@ -1,0 +1,92 @@
+hadoop fs -mkdir /user/kjanouskova/hive
+hadoop fs -mkdir /user/kjanouskova/hive/loan
+hadoop fs -mkdir /user/kjanouskova/hive/repayment
+hadoop fs -cp /data_skoleni/LoanData.csv /user/kjanouskova/hive/loan
+
+create database if not exists db_kjanouskova;
+
+use db_kjanouskova;
+
+drop table ext_repayment;
+
+create external table ext_repayment (
+ReportAsOfEOD string,
+loan_id string,
+DateRep string,
+PrincipalRepayment string,
+InterestRepayment string,
+LateFeesRepayment string
+)
+row format delimited fields terminated  by ',' lines terminated by '\n'
+location '/user/kjanouskova/hive/repayment'
+tblproperties ("skip.header.line.count"="1");
+
+
+create table repayment (
+DateRep date,
+loan_id string,
+PrincipalRepayment decimal(12,5),
+InterestRepayment decimal(12,5),
+LateFeesRepayment decimal(12,5)
+)
+partitioned by (year int)
+stored as ORC;
+
+
+
+insert overwrite table repayment partition (year)
+select
+DateRep,
+loan_id,
+PrincipalRepayment,
+InterestRepayment,
+LateFeesRepayment,
+substr(DateRep,1,4) as year
+from ext_repayment;
+
+
+
+create external table if not exists ext_resale (
+ReportAsOfEOD string,
+loan_id string,
+StartDate string,
+EndDate string,
+Result string,
+DiscountRate string,
+DebtDaysAtStart string, 
+DebtDaysAtEnd string,
+PrincipalAtStart string,
+PrincipalAtEnd string)
+row format delimited fields terminated  by ',' lines terminated by '\n'
+location '/user/kjanouskova/hive/resale'
+tblproperties ("skip.header.line.count"="1");
+
+
+
+create table resale  (
+ReportAsOfEOD date,
+loan_id string,
+StartDate timestamp,
+EndDate timestamp,
+Result string,
+DiscountRate string,
+DebtDaysAtStart string, 
+DebtDaysAtEnd string,
+PrincipalAtStart string,
+PrincipalAtEnd string)
+partitioned by (year int)
+stored as ORC;
+
+
+insert overwrite table resale partition (year)
+select
+ReportAsOfEOD ,loan_id, StartDate ,
+EndDate,
+Result,
+DiscountRate,
+DebtDaysAtStart, 
+DebtDaysAtEnd ,
+PrincipalAtStart ,
+PrincipalAtEnd,
+substr(ReportAsOfEOD ,1, 4) as year
+from ext_resale
