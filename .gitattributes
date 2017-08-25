@@ -1,0 +1,3 @@
+*.sh    text eol=lf
+*.bdy    text eol=lf
+*.py	text eol=lf
