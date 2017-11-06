@@ -66,7 +66,7 @@ SHOW TABLES;
 
 # DROP TABLE teplota_ext;
 
-CREATE TABLE teplota_ext ( 
+CREATE EXTERNAL TABLE teplota_ext ( 
     stanice string, mesic string, den string, hodina string, 
     teplota string, flag string, latitude string, longitude string, 
     vyska string, stat string, nazev string

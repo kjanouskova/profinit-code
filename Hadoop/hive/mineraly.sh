@@ -60,7 +60,7 @@ SHOW TABLES;
 
 # DROP TABLE deposit_ext;
 
-CREATE TABLE deposit_ext (
+CREATE EXTERNAL TABLE deposit_ext (
 id BIGINT, 
 country VARCHAR(255), 
 minerals STRING
